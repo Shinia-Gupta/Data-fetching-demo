@@ -1,7 +1,8 @@
 "use server"
 
 import { redirect } from "next/navigation";
-import { addProduct, updateProduct } from "../prisma-db";
+import { addProduct, deleteProduct, updateProduct } from "../prisma-db";
+import { revalidatePath } from "next/cache";
 
 export type Errors = {
     title?: string;
@@ -67,4 +68,12 @@ export type FormState = {
 
   await updateProduct(id, title, parseInt(price), description);
   redirect("/products-db");
+}
+
+export async function removeProduct(id: number) {
+    deleteProduct(id);
+
+    //now when the product is deleted, we need to refresh the page in order to see the changes. To solve this issue, we can use the revalidatePath method
+    //we are telling Nextjs to refetch data for the path after deletion
+    revalidatePath("/products-db");
 }
