@@ -7,7 +7,15 @@ type User = {
 }
 
 export default async function UsersServer() {
+
+    //adding a delay deliberately to see the loading state
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
     const res = await fetch('https://jsonplaceholder.typicode.com/users');
+    
+    //URL to see error state
+    // const res = await fetch('https://jsonplaceholder.typicode.com/uses');
+
 const users:User[]=await res.json()
 // console.log("users - ",users);
 
