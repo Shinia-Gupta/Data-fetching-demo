@@ -16,9 +16,21 @@ data: [
 // Run seed if needed
 seedProducts () ;
 
-export async function getAllProducts() {
+export async function getAllProducts(query?:string) {
     await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate delay to see effect
-  return prisma.product.findMany();
+  
+  if(query){
+    return prisma.product.findMany({
+      where: {
+        OR: [
+          { title: { contains: query } },
+          { description: { contains: query } },
+        ],
+      },
+    });
+  }
+
+    return prisma.product.findMany();
 }
 
 export async function getProductById(id: number) {
